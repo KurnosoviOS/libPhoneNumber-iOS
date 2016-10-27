@@ -1517,12 +1517,19 @@ static NSArray *GEO_MOBILE_COUNTRIES;
                          formattedNationalNumber:(NSString *)formattedNationalNumber
                               formattedExtension:(NSString *)formattedExtension
 {
+    
+    NSString *fullPhone;
     switch (numberFormat)
     {
         case NBEPhoneNumberFormatE164:
             return [NSString stringWithFormat:@"+%@%@%@", countryCallingCode, formattedNationalNumber, formattedExtension];
         case NBEPhoneNumberFormatINTERNATIONAL:
-            return [NSString stringWithFormat:@"+%@ %@%@", countryCallingCode, formattedNationalNumber, formattedExtension];
+            fullPhone = [NSString stringWithFormat:@"%@ %@%@", countryCallingCode, formattedNationalNumber, formattedExtension];
+            if (fullPhone.length > 11) {
+                return [NSString stringWithFormat:@"+%@ %@%@", countryCallingCode, formattedNationalNumber, formattedExtension];
+            } else {
+                return [NSString stringWithFormat:@"%@ %@%@", countryCallingCode, formattedNationalNumber, formattedExtension];
+            }
         case NBEPhoneNumberFormatRFC3966:
             return [NSString stringWithFormat:@"%@+%@-%@%@", RFC3966_PREFIX, countryCallingCode, formattedNationalNumber, formattedExtension];
         case NBEPhoneNumberFormatNATIONAL:
@@ -1530,7 +1537,6 @@ static NSArray *GEO_MOBILE_COUNTRIES;
             return [NSString stringWithFormat:@"%@%@", formattedNationalNumber, formattedExtension];
     }
 }
-
 
 /**
  * Formats a phone number using the original phone number format that the number
